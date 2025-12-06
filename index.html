@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>免費公開 API 資源互動指南 | Public API Interactive Report</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Custom Styling overrides & utilities */
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: #fdfbf7; /* Warm neutral background */
+      color: #334155;
+    }
+
+    /* Chart Container Strict Rules */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+    }
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 350px;
+      }
+    }
+    
+    /* Custom Scrollbar for the table container */
+    .table-scroller::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .table-scroller::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .table-scroller::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .table-scroller::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      backdrop-filter: blur(4px);
+    }
+    
+    /* Badge Styles */
+    .badge-auth-none {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+    .badge-auth-key {
+      background-color: #fff7ed;
+      color: #9a3412;
+    }
+    .badge-auth-oauth {
+      background-color: #eff6ff;
+      color: #1e40af;
+    }
+
+    /* Smooth transitions */
+    * {
+      transition: all 0.2s ease;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-indigo-100 selection:text-indigo-800">
+  
+  <!-- Header Section -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-layer-group text-indigo-600 text-2xl"></i>
+        <div>
+          <h1 class="text-xl font-bold text-slate-800">API 資源探勘報告</h1>
+          <p class="text-xs text-slate-500">免費公開 API 整合清單 (Top 80+ Selection)</p>
+        </div>
+      </div>
+      
+      <div class="flex gap-4 text-sm">
+        <div class="text-center px-4 py-2 bg-slate-50 rounded-lg">
+          <span class="block text-xl font-bold text-indigo-600" id="total-apis-count">0</span>
+          <span class="text-xs text-slate-500">收錄 API</span>
+        </div>
+        <div class="text-center px-4 py-2 bg-slate-50 rounded-lg">
+          <span class="block text-xl font-bold text-emerald-600" id="free-apis-count">0</span>
+          <span class="text-xs text-slate-500">完全免費</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Introduction & Context -->
+    <section class="prose max-w-none text-slate-600">
+      <h2 class="text-lg font-semibold text-slate-800 mb-2">關於此報告</h2>
+      <p class="mb-4">
+        本應用程式將「免費公共 API 資源報告」轉化為互動式儀表板。針對開發者、數據分析師與創意編碼者，我們整理了目前網路上最實用、穩定且易於串接的 API 接口。
+        與其閱讀冗長的靜態文件，您可以透過下方的視覺化圖表了解目前的 API 生態分佈，並使用「智慧清單」功能快速篩選出符合您專案需求的資源。
+        所有資料皆已結構化處理，方便您進行比較與查找。
+      </p>
+    </section>
+
+    <!-- Analytics Dashboard Section -->
+    <section>
+      <div class="mb-4">
+        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-chart-pie text-indigo-500"></i> API 生態數據分析
+        </h3>
+        <p class="text-sm text-slate-500">視覺化呈現各類型 API 的佔比與認證門檻，協助您快速掌握資源概況。</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Category Chart -->
+        <div class="glass-panel p-4 rounded-xl">
+          <h4 class="text-sm font-semibold text-slate-700 mb-4 text-center">資源類別分佈</h4>
+          <div class="chart-container">
+            <canvas id="categoryChart"></canvas>
+          </div>
+          <div class="mt-2 text-xs text-center text-slate-400">顯示各領域 API 的數量佔比</div>
+        </div>
+
+        <!-- Auth Chart -->
+        <div class="glass-panel p-4 rounded-xl">
+          <h4 class="text-sm font-semibold text-slate-700 mb-4 text-center">認證機制統計</h4>
+          <div class="chart-container">
+            <canvas id="authChart"></canvas>
+          </div>
+          <div class="mt-2 text-xs text-center text-slate-400">分析 API 的接入難度 (No Auth 最易接入)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Sheet Section -->
+    <section id="explorer" class="scroll-mt-20">
+      <div class="mb-4 flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-table-list text-indigo-500"></i> 資源智慧清單
+          </h3>
+          <p class="text-sm text-slate-500">類似 Google 試算表的結構化檢視，支援即時搜尋與多維度篩選。</p>
+        </div>
+        
+        <!-- Controls -->
+        <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <div class="relative">
+            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400"></i>
+            <input type="text" id="searchInput" placeholder="搜尋名稱、描述或關鍵字..." 
+                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none w-full sm:w-64 text-sm transition-shadow shadow-sm">
+          </div>
+          <select id="categoryFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm bg-white shadow-sm cursor-pointer">
+            <option value="All">所有分類</option>
+            <!-- Options populated by JS -->
+          </select>
+        </div>
+      </div>
+
+      <!-- The Grid/Table -->
+      <div class="glass-panel rounded-xl overflow-hidden flex flex-col">
+        <div class="overflow-x-auto table-scroller">
+          <table class="w-full text-left text-sm whitespace-nowrap">
+            <thead class="bg-slate-100 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/4">API 名稱</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/6">分類</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/3">功能簡述</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/12">認證</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/12">HTTPS</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/12 text-right">操作</th>
+              </tr>
+            </thead>
+            <tbody id="apiTableBody" class="divide-y divide-gray-100 bg-white">
+              <!-- Rows populated by JS -->
+            </tbody>
+          </table>
+        </div>
+        <!-- Pagination / Count Footer -->
+        <div class="px-6 py-3 bg-slate-50 border-t border-gray-200 text-xs text-slate-500 flex justify-between items-center">
+          <span id="showing-count">顯示 0 / 0 筆資料</span>
+          <button onclick="exportCSV()" class="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
+            <i class="fa-solid fa-file-csv mr-1"></i> 下載 CSV
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal for Details -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-50 transition-opacity backdrop-blur-sm" onclick="closeModal()"></div>
+    
+    <!-- Panel -->
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+      <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+          <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+              <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                <i class="fa-solid fa-bolt text-indigo-600"></i>
+              </div>
+              <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
+                <h3 class="text-xl font-semibold leading-6 text-gray-900" id="modalTitle">API Name</h3>
+                <div class="mt-1">
+                  <span id="modalCategory" class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">Category</span>
+                </div>
+                <div class="mt-4">
+                  <p class="text-sm text-gray-500" id="modalDesc">Detailed description goes here.</p>
+                </div>
+                
+                <div class="mt-6 grid grid-cols-2 gap-4 border-t border-gray-100 pt-4">
+                  <div>
+                    <span class="text-xs text-gray-400 block uppercase">Auth</span>
+                    <span id="modalAuth" class="text-sm font-medium text-gray-800">None</span>
+                  </div>
+                  <div>
+                    <span class="text-xs text-gray-400 block uppercase">HTTPS</span>
+                    <span id="modalHttps" class="text-sm font-medium text-gray-800">Yes</span>
+                  </div>
+                  <div>
+                    <span class="text-xs text-gray-400 block uppercase">CORS</span>
+                    <span id="modalCors" class="text-sm font-medium text-gray-800">Unknown</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <a id="modalLink" href="#" target="_blank" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto transition-colors">
+              <i class="fa-solid fa-external-link-alt mr-2 mt-1"></i> 前往文件
+            </a>
+            <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors" onclick="closeModal()">
+              關閉
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-2 rounded shadow-lg transform translate-y-20 transition-transform duration-300 z-50 text-sm flex items-center gap-2">
+    <i class="fa-solid fa-check-circle text-green-400"></i>
+    <span>連結已複製</span>
+  </div>
+
+  <script>
+    // --- 1. Data Source ---
+    const apiData = [
+      { name: "Cat Facts", category: "Animals", auth: "No Auth", https: true, cors: "Yes", desc: "每日隨機貓咪冷知識", link: "https://alexwohlbruck.github.io/cat-facts/" },
+      { name: "Dog CEO", category: "Animals", auth: "No Auth", https: true, cors: "Yes", desc: "根據品種獲取狗狗圖片集", link: "https://dog.ceo/dog-api/" },
+      { name: "PetFinder", category: "Animals", auth: "ApiKey", https: true, cors: "Yes", desc: "寵物領養數據庫 (需要申請)", link: "https://www.petfinder.com/developers/" },
+      { name: "AnimeChan", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: "隨機動漫語錄", link: "https://github.com/rocktimsaikia/anime-chan" },
+      { name: "Jikan", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: "非官方 MyAnimeList API", link: "https://jikan.moe/" },
+      { name: "Studio Ghibli", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: "吉卜力工作室電影與角色資料", link: "https://ghibliapi.vercel.app/" },
+      { name: "VirusTotal", category: "Security", auth: "ApiKey", https: true, cors: "Unknown", desc: "分析可疑文件與網址", link: "https://www.virustotal.com/" },
+      { name: "HaveIBeenPwned", category: "Security", auth: "ApiKey", https: true, cors: "Yes", desc: "檢查 Email 是否在洩露名單", link: "https://haveibeenpwned.com/API/v3" },
+      { name: "Open Library", category: "Books", auth: "No Auth", https: true, cors: "Yes", desc: "圖書、封面與作者數據庫", link: "https://openlibrary.org/developers/api" },
+      { name: "Gutendex", category: "Books", auth: "No Auth", https: true, cors: "Yes", desc: "古騰堡計畫電子書索引", link: "https://gutendex.com/" },
+      { name: "CoinGecko", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: "加密貨幣價格與市場數據", link: "https://www.coingecko.com/en/api" },
+      { name: "Binance", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: "幣安交易所公共數據", link: "https://github.com/binance/binance-spot-api-docs" },
+      { name: "ExchangeRate-API", category: "Finance", auth: "ApiKey", https: true, cors: "Yes", desc: "法幣匯率轉換", link: "https://www.exchangerate-api.com/" },
+      { name: "WallstreetBets", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: "WSB Reddit 討論趨勢", link: "https://wsb-api.onrender.com/" },
+      { name: "Public Holidays", category: "Calendar", auth: "No Auth", https: true, cors: "Yes", desc: "全球各國國定假日查詢", link: "https://date.nager.at/" },
+      { name: "Google Fonts", category: "Design", auth: "ApiKey", https: true, cors: "Yes", desc: "Google 字體元數據", link: "https://developers.google.com/fonts/docs/developer_api" },
+      { name: "Unsplash", category: "Photography", auth: "ApiKey", https: true, cors: "Yes", desc: "高畫質免版權圖片搜尋", link: "https://unsplash.com/developers" },
+      { name: "JSONPlaceholder", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "測試用的假資料 (Posts, Users)", link: "https://jsonplaceholder.typicode.com/" },
+      { name: "ReqRes", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "模擬 REST API 回應", link: "https://reqres.in/" },
+      { name: "HttpBin", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "HTTP 請求與回應測試工具", link: "https://httpbin.org/" },
+      { name: "IPify", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "簡單獲取公共 IP 地址", link: "https://www.ipify.org/" },
+      { name: "Genderize.io", category: "Demographics", auth: "No Auth", https: true, cors: "Yes", desc: "根據名字預測性別", link: "https://genderize.io/" },
+      { name: "Agify.io", category: "Demographics", auth: "No Auth", https: true, cors: "Yes", desc: "根據名字預測年齡", link: "https://agify.io/" },
+      { name: "OpenWeather", category: "Weather", auth: "ApiKey", https: true, cors: "Yes", desc: "全球天氣預報與歷史數據", link: "https://openweathermap.org/api" },
+      { name: "7Timer!", category: "Weather", auth: "No Auth", https: true, cors: "Yes", desc: "天文氣象預報", link: "http://www.7timer.info/doc.php" },
+      { name: "NASA", category: "Science", auth: "ApiKey", https: true, cors: "Yes", desc: "天文圖片、小行星數據等", link: "https://api.nasa.gov/" },
+      { name: "SpaceX", category: "Science", auth: "No Auth", https: true, cors: "Yes", desc: "SpaceX 發射任務數據", link: "https://github.com/r-spacex/SpaceX-API" },
+      { name: "Rest Countries", category: "Geocoding", auth: "No Auth", https: true, cors: "Yes", desc: "國家資訊 (人口、貨幣、國旗)", link: "https://restcountries.com/" },
+      { name: "Zipcopotamus", category: "Geocoding", auth: "No Auth", https: true, cors: "Yes", desc: "郵遞區號查詢城市", link: "https://www.zippopotam.us/" },
+      { name: "Spotify", category: "Music", auth: "OAuth", https: true, cors: "Yes", desc: "音樂元數據、播放清單", link: "https://developer.spotify.com/documentation/web-api/" },
+      { name: "Last.fm", category: "Music", auth: "ApiKey", https: true, cors: "Yes", desc: "音樂資料庫與聽歌紀錄", link: "https://www.last.fm/api" },
+      { name: "Lyrics.ovh", category: "Music", auth: "No Auth", https: true, cors: "Yes", desc: "簡單歌詞查詢", link: "https://lyrics.ovh/" },
+      { name: "OpenFoodFacts", category: "Food", auth: "No Auth", https: true, cors: "Yes", desc: "全球食品成分數據庫", link: "https://world.openfoodfacts.org/data" },
+      { name: "TheCocktailDB", category: "Food", auth: "ApiKey", https: true, cors: "Yes", desc: "雞尾酒配方資料庫", link: "https://www.thecocktaildb.com/api.php" },
+      { name: "PunkAPI", category: "Food", auth: "No Auth", https: true, cors: "Yes", desc: "BrewDog 啤酒配方", link: "https://punkapi.com/" },
+      { name: "NewsAPI", category: "News", auth: "ApiKey", https: true, cors: "Yes", desc: "全球新聞標題索引", link: "https://newsapi.org/" },
+      { name: "HackerNews", category: "News", auth: "No Auth", https: true, cors: "Yes", desc: "官方 Firebase API", link: "https://github.com/HackerNews/API" },
+      { name: "Advice Slip", category: "Fun", auth: "No Auth", https: true, cors: "Yes", desc: "隨機產生一條建議", link: "https://api.adviceslip.com/" },
+      { name: "Bored API", category: "Fun", auth: "No Auth", https: true, cors: "Yes", desc: "當你無聊時的活動建議", link: "https://www.boredapi.com/" },
+      { name: "FunTranslations", category: "Fun", auth: "ApiKey", https: true, cors: "Yes", desc: "尤達大師、精靈語翻譯", link: "https://funtranslations.com/api" },
+      { name: "Pokemon TCG", category: "Games", auth: "ApiKey", https: true, cors: "Yes", desc: "寶可夢集換式卡牌資料", link: "https://pokemontcg.io/" },
+      { name: "OpenDota", category: "Games", auth: "No Auth", https: true, cors: "Yes", desc: "Dota 2 比賽數據", link: "https://docs.opendota.com/" },
+      { name: "CheapShark", category: "Games", auth: "No Auth", https: true, cors: "Yes", desc: "PC 遊戲特價追蹤", link: "https://www.cheapshark.com/api/1.0/" },
+      { name: "DictionaryAPI", category: "Utility", auth: "No Auth", https: true, cors: "Yes", desc: "免費英語字典", link: "https://dictionaryapi.dev/" },
+      { name: "Urban Dictionary", category: "Utility", auth: "ApiKey", https: true, cors: "Yes", desc: "俚語字典", link: "https://rapidapi.com/community/api/urban-dictionary" },
+      { name: "QR Code Generator", category: "Utility", auth: "No Auth", https: true, cors: "Yes", desc: "生成 QR Code 圖片", link: "https://goqr.me/api/" },
+      { name: "Random User", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "產生隨機用戶個資", link: "https://randomuser.me/" },
+      { name: "DiceBear", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "生成 SVG 頭像", link: "https://dicebear.com/" },
+      { name: "Mapbox", category: "Geocoding", auth: "ApiKey", https: true, cors: "Yes", desc: "地圖與導航服務", link: "https://docs.mapbox.com/api/" },
+      { name: "Discord", category: "Social", auth: "OAuth", https: true, cors: "Yes", desc: "Discord 機器人與互動", link: "https://discord.com/developers/docs/intro" },
+      { name: "Telegram", category: "Social", auth: "ApiKey", https: true, cors: "Yes", desc: "Telegram Bot API", link: "https://core.telegram.org/bots/api" }
+    ];
+
+    // State Management
+    let currentData = [...apiData];
+    let categoryChart = null;
+    let authChart = null;
+
+    // --- 2. Chart Configuration & Rendering ---
+    
+    // Helper to get color palette
+    const getColors = (count) => {
+      const colors = [
+        '#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+        '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#3b82f6'
+      ];
+      return Array(count).fill().map((_, i) => colors[i % colors.length]);
+    };
+
+    function renderStats() {
+      // Update Text Counters
+      document.getElementById('total-apis-count').innerText = apiData.length;
+      document.getElementById('free-apis-count').innerText = apiData.filter(d => d.auth === 'No Auth').length;
+
+      // Prepare Data for Charts
+      
+      // 1. Categories
+      const catCounts = {};
+      apiData.forEach(item => {
+        catCounts[item.category] = (catCounts[item.category] || 0) + 1;
+      });
+      const sortedCats = Object.entries(catCounts).sort((a,b) => b[1] - a[1]);
+      
+      const catLabels = sortedCats.map(x => x[0]);
+      const catValues = sortedCats.map(x => x[1]);
+
+      // 2. Auth Types
+      const authCounts = {};
+      apiData.forEach(item => {
+        authCounts[item.auth] = (authCounts[item.auth] || 0) + 1;
+      });
+      
+      // Chart 1: Categories (Doughnut)
+      const ctxCat = document.getElementById('categoryChart').getContext('2d');
+      if (categoryChart) categoryChart.destroy();
+      
+      categoryChart = new Chart(ctxCat, {
+        type: 'doughnut',
+        data: {
+          labels: catLabels,
+          datasets: [{
+            data: catValues,
+            backgroundColor: getColors(catLabels.length),
+            borderWidth: 0,
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  let label = context.label || '';
+                  if (label) label += ': ';
+                  let value = context.parsed;
+                  let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                  let percentage = Math.round((value / total) * 100) + '%';
+                  return label + value + ' (' + percentage + ')';
+                }
+              }
+            }
+          },
+          layout: { padding: 10 }
+        }
+      });
+
+      // Chart 2: Auth Types (Bar)
+      const ctxAuth = document.getElementById('authChart').getContext('2d');
+      if (authChart) authChart.destroy();
+      
+      authChart = new Chart(ctxAuth, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(authCounts),
+          datasets: [{
+            label: '數量',
+            data: Object.values(authCounts),
+            backgroundColor: ['#dcfce7', '#fff7ed', '#eff6ff'],
+            borderColor: ['#166534', '#9a3412', '#1e40af'],
+            borderWidth: 1,
+            borderRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: { beginAtZero: true, grid: { display: false } },
+            y: { grid: { display: false } }
+          }
+        }
+      });
+
+      // Populate Filter Dropdown
+      const selectInfo = document.getElementById('categoryFilter');
+      catLabels.sort().forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.innerText = cat;
+        selectInfo.appendChild(opt);
+      });
+    }
+
+    // --- 3. Table/Grid Rendering & Logic ---
+
+    function getAuthBadge(authType) {
+      if (authType === 'No Auth') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-none ring-1 ring-inset ring-green-600/20">無須認證</span>`;
+      if (authType === 'ApiKey') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-key ring-1 ring-inset ring-orange-600/20">API Key</span>`;
+      if (authType === 'OAuth') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-oauth ring-1 ring-inset ring-blue-700/10">OAuth</span>`;
+      return `<span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">${authType}</span>`;
+    }
+
+    function getHttpsIcon(isHttps) {
+      return isHttps
+        ? `<i class="fa-solid fa-lock text-emerald-500" title="HTTPS Supported"></i>`
+        : `<i class="fa-solid fa-lock-open text-gray-400" title="HTTP Only"></i>`;
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('apiTableBody');
+      tbody.innerHTML = '';
+
+      document.getElementById('showing-count').innerText = `顯示 ${data.length} / ${apiData.length} 筆資料`;
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 italic">找不到符合的 API 資源</td></tr>`;
+        return;
+      }
+
+      data.forEach((item, index) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 transition-colors cursor-pointer group";
+        tr.onclick = (e) => {
+          if (e.target.closest('button') || e.target.closest('a')) return;
+          openModal(item);
+        };
+
+        tr.innerHTML = `
+          <td class="px-6 py-4">
+            <div class="font-medium text-slate-900 group-hover:text-indigo-600 transition-colors">${item.name}</div>
+          </td>
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-800">
+              ${item.category}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-slate-500 truncate max-w-xs" title="${item.desc}">
+            ${item.desc}
+          </td>
+          <td class="px-6 py-4">
+            ${getAuthBadge(item.auth)}
+          </td>
+          <td class="px-6 py-4 text-center">
+            ${getHttpsIcon(item.https)}
+          </td>
+          <td class="px-6 py-4 text-right">
+            <button onclick="copyLink('${item.link}')" class="text-slate-400 hover:text-indigo-600 p-2" title="複製連結">
+              <i class="fa-regular fa-copy"></i>
+            </button>
+            <a href="${item.link}" target="_blank" class="text-slate-400 hover:text-indigo-600 p-2 ml-1" title="開啟連結">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i>
+            </a>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // --- 4. Filtering Logic ---
+
+    function filterData() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+
+      currentData = apiData.filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm) ||
+                              item.desc.toLowerCase().includes(searchTerm) ||
+                              item.category.toLowerCase().includes(searchTerm);
+        const matchesCategory = category === 'All' || item.category === category;
+        
+        return matchesSearch && matchesCategory;
+      });
+
+      renderTable(currentData);
+    }
+
+    // Event Listeners
+    document.getElementById('searchInput').addEventListener('input', filterData);
+    document.getElementById('categoryFilter').addEventListener('change', filterData);
+
+    // --- 5. Modal & Utilities ---
+
+    function openModal(item) {
+      document.getElementById('modalTitle').innerText = item.name;
+      document.getElementById('modalCategory').innerText = item.category;
+      document.getElementById('modalDesc').innerText = item.desc;
+      document.getElementById('modalAuth').innerHTML = getAuthBadge(item.auth);
+      document.getElementById('modalHttps').innerText = item.https ? "支援" : "不支援";
+      document.getElementById('modalCors').innerText = item.cors;
+      document.getElementById('modalLink').href = item.link;
+      
+      document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('detailModal').classList.add('hidden');
+    }
+
+    function copyLink(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.remove('translate-y-20');
+        setTimeout(() => {
+          toast.classList.add('translate-y-20');
+        }, 2000);
+      });
+    }
+
+    function exportCSV() {
+      const headers = ["Name", "Category", "Description", "Auth", "HTTPS", "Link"];
+      const csvContent = "data:text/csv;charset=utf-8,\uFEFF"
+        + headers.join(",") + "\n"
+        + currentData.map(e => `"${e.name}","${e.category}","${e.desc}","${e.auth}","${e.https}","${e.link}"`).join("\n");
+      
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "public_apis_report.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // --- Initialization ---
+    window.onload = function() {
+      renderStats();
+      renderTable(apiData);
+    };
+  </script>
+</body>
+</html>
+
