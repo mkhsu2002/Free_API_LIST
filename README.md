@@ -2,6 +2,8 @@
 
 一個精美的互動式網頁，展示免費公開 API 資源清單。
 
+🔗 **GitHub 儲存庫**：[https://github.com/mkhsu2002/Free_API_LIST](https://github.com/mkhsu2002/Free_API_LIST)
+
 ## 功能特色
 
 - 📊 **數據視覺化**：使用 Chart.js 呈現 API 類別分佈與認證機制統計
@@ -31,8 +33,10 @@
 
 部署完成後，您的網站將可在以下網址訪問：
 ```
-https://[您的GitHub用戶名].github.io/[儲存庫名稱]/
+https://mkhsu2002.github.io/Free_API_LIST/
 ```
+
+🌐 **線上預覽**：[https://mkhsu2002.github.io/Free_API_LIST/](https://mkhsu2002.github.io/Free_API_LIST/)
 
 ## 本地開發
 

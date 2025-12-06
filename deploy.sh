@@ -5,8 +5,8 @@
 # - GITHUB_USERNAME: 您的 GitHub 用戶名
 # - REPO_NAME: 儲存庫名稱
 
-GITHUB_USERNAME="YOUR_USERNAME"
-REPO_NAME="api-list"
+GITHUB_USERNAME="mkhsu2002"
+REPO_NAME="Free_API_LIST"
 
 echo "🚀 開始部署到 GitHub Pages..."
 
