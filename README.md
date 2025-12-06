@@ -36,7 +36,7 @@
 https://mkhsu2002.github.io/Free_API_LIST/
 ```
 
-🌐 **線上預覽**：[https://mkhsu2002.github.io/Free_API_LIST/](https://mkhsu2002.github.io/Free_API_LIST/)
+🌐 **線上預覽**：[[https://mkhsu2002.github.io/Free_API_LIST/](https://free-api-list.pages.dev/)
 
 ## 本地開發
 
