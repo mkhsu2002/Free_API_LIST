@@ -60,7 +60,21 @@ https://mkhsu2002.github.io/Free_API_LIST/
 
 MIT License
 
+## 語言支援
+
+網站支援兩種語言：
+- **繁體中文** - 預設語言
+- **English** - 點擊標題列中的語言切換按鈕
+
+語言偏好會儲存在瀏覽器的 localStorage 中。
+
 ## 貢獻
 
 歡迎提交 Issue 或 Pull Request！
+
+## 相關檔案
+
+- `README_EN.md` - 英文版說明文件
+- `DEPLOY.md` - 詳細部署指南
+- `deploy.sh` - 快速部署腳本
 

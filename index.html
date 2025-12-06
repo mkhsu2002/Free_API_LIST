@@ -91,19 +91,28 @@
       <div class="flex items-center gap-3">
         <i class="fa-solid fa-layer-group text-indigo-600 text-2xl"></i>
         <div>
-          <h1 class="text-xl font-bold text-slate-800">API 資源探勘報告</h1>
-          <p class="text-xs text-slate-500">免費公開 API 整合清單 (Top 80+ Selection)</p>
+          <h1 class="text-xl font-bold text-slate-800" data-i18n="header.title">API 資源探勘報告</h1>
+          <p class="text-xs text-slate-500" data-i18n="header.subtitle">免費公開 API 整合清單 (Top 80+ Selection)</p>
         </div>
       </div>
       
-      <div class="flex gap-4 text-sm">
+      <div class="flex gap-4 text-sm items-center">
         <div class="text-center px-4 py-2 bg-slate-50 rounded-lg">
           <span class="block text-xl font-bold text-indigo-600" id="total-apis-count">0</span>
-          <span class="text-xs text-slate-500">收錄 API</span>
+          <span class="text-xs text-slate-500" data-i18n="header.totalApis">收錄 API</span>
         </div>
         <div class="text-center px-4 py-2 bg-slate-50 rounded-lg">
           <span class="block text-xl font-bold text-emerald-600" id="free-apis-count">0</span>
-          <span class="text-xs text-slate-500">完全免費</span>
+          <span class="text-xs text-slate-500" data-i18n="header.freeApis">完全免費</span>
+        </div>
+        <!-- Language Switcher -->
+        <div class="flex gap-2">
+          <button onclick="switchLanguage('zh-TW')" id="lang-zh" class="px-3 py-1.5 rounded-md bg-indigo-600 text-white text-xs font-medium transition-colors">
+            <i class="fa-solid fa-language mr-1"></i> 中文
+          </button>
+          <button onclick="switchLanguage('en')" id="lang-en" class="px-3 py-1.5 rounded-md bg-gray-200 text-gray-700 text-xs font-medium hover:bg-gray-300 transition-colors">
+            <i class="fa-solid fa-language mr-1"></i> EN
+          </button>
         </div>
       </div>
     </div>
@@ -113,8 +122,8 @@
 
     <!-- Introduction & Context -->
     <section class="prose max-w-none text-slate-600">
-      <h2 class="text-lg font-semibold text-slate-800 mb-2">關於此報告</h2>
-      <p class="mb-4">
+      <h2 class="text-lg font-semibold text-slate-800 mb-2" data-i18n="intro.title">關於此報告</h2>
+      <p class="mb-4" data-i18n="intro.description">
         本應用程式將「免費公共 API 資源報告」轉化為互動式儀表板。針對開發者、數據分析師與創意編碼者，我們整理了目前網路上最實用、穩定且易於串接的 API 接口。
         與其閱讀冗長的靜態文件，您可以透過下方的視覺化圖表了解目前的 API 生態分佈，並使用「智慧清單」功能快速篩選出符合您專案需求的資源。
         所有資料皆已結構化處理，方便您進行比較與查找。
@@ -125,28 +134,28 @@
     <section>
       <div class="mb-4">
         <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-          <i class="fa-solid fa-chart-pie text-indigo-500"></i> API 生態數據分析
+          <i class="fa-solid fa-chart-pie text-indigo-500"></i> <span data-i18n="analytics.title">API 生態數據分析</span>
         </h3>
-        <p class="text-sm text-slate-500">視覺化呈現各類型 API 的佔比與認證門檻，協助您快速掌握資源概況。</p>
+        <p class="text-sm text-slate-500" data-i18n="analytics.description">視覺化呈現各類型 API 的佔比與認證門檻，協助您快速掌握資源概況。</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Category Chart -->
         <div class="glass-panel p-4 rounded-xl">
-          <h4 class="text-sm font-semibold text-slate-700 mb-4 text-center">資源類別分佈</h4>
+          <h4 class="text-sm font-semibold text-slate-700 mb-4 text-center" data-i18n="analytics.categoryTitle">資源類別分佈</h4>
           <div class="chart-container">
             <canvas id="categoryChart"></canvas>
           </div>
-          <div class="mt-2 text-xs text-center text-slate-400">顯示各領域 API 的數量佔比</div>
+          <div class="mt-2 text-xs text-center text-slate-400" data-i18n="analytics.categoryDesc">顯示各領域 API 的數量佔比</div>
         </div>
 
         <!-- Auth Chart -->
         <div class="glass-panel p-4 rounded-xl">
-          <h4 class="text-sm font-semibold text-slate-700 mb-4 text-center">認證機制統計</h4>
+          <h4 class="text-sm font-semibold text-slate-700 mb-4 text-center" data-i18n="analytics.authTitle">認證機制統計</h4>
           <div class="chart-container">
             <canvas id="authChart"></canvas>
           </div>
-          <div class="mt-2 text-xs text-center text-slate-400">分析 API 的接入難度 (No Auth 最易接入)</div>
+          <div class="mt-2 text-xs text-center text-slate-400" data-i18n="analytics.authDesc">分析 API 的接入難度 (No Auth 最易接入)</div>
         </div>
       </div>
     </section>
@@ -156,20 +165,20 @@
       <div class="mb-4 flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
         <div>
           <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-            <i class="fa-solid fa-table-list text-indigo-500"></i> 資源智慧清單
+            <i class="fa-solid fa-table-list text-indigo-500"></i> <span data-i18n="table.title">資源智慧清單</span>
           </h3>
-          <p class="text-sm text-slate-500">類似 Google 試算表的結構化檢視，支援即時搜尋與多維度篩選。</p>
+          <p class="text-sm text-slate-500" data-i18n="table.description">類似 Google 試算表的結構化檢視，支援即時搜尋與多維度篩選。</p>
         </div>
         
         <!-- Controls -->
         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
           <div class="relative">
             <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400"></i>
-            <input type="text" id="searchInput" placeholder="搜尋名稱、描述或關鍵字..." 
+            <input type="text" id="searchInput" data-i18n-placeholder="table.searchPlaceholder" placeholder="搜尋名稱、描述或關鍵字..." 
                    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none w-full sm:w-64 text-sm transition-shadow shadow-sm">
           </div>
           <select id="categoryFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm bg-white shadow-sm cursor-pointer">
-            <option value="All">所有分類</option>
+            <option value="All" data-i18n="table.allCategories">所有分類</option>
             <!-- Options populated by JS -->
           </select>
         </div>
@@ -181,12 +190,12 @@
           <table class="w-full text-left text-sm whitespace-nowrap">
             <thead class="bg-slate-100 border-b border-gray-200">
               <tr>
-                <th class="px-6 py-3 font-semibold text-slate-700 w-1/4">API 名稱</th>
-                <th class="px-6 py-3 font-semibold text-slate-700 w-1/6">分類</th>
-                <th class="px-6 py-3 font-semibold text-slate-700 w-1/3">功能簡述</th>
-                <th class="px-6 py-3 font-semibold text-slate-700 w-1/12">認證</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/4" data-i18n="table.headers.name">API 名稱</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/6" data-i18n="table.headers.category">分類</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/3" data-i18n="table.headers.description">功能簡述</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/12" data-i18n="table.headers.auth">認證</th>
                 <th class="px-6 py-3 font-semibold text-slate-700 w-1/12">HTTPS</th>
-                <th class="px-6 py-3 font-semibold text-slate-700 w-1/12 text-right">操作</th>
+                <th class="px-6 py-3 font-semibold text-slate-700 w-1/12 text-right" data-i18n="table.headers.actions">操作</th>
               </tr>
             </thead>
             <tbody id="apiTableBody" class="divide-y divide-gray-100 bg-white">
@@ -196,9 +205,9 @@
         </div>
         <!-- Pagination / Count Footer -->
         <div class="px-6 py-3 bg-slate-50 border-t border-gray-200 text-xs text-slate-500 flex justify-between items-center">
-          <span id="showing-count">顯示 0 / 0 筆資料</span>
+          <span id="showing-count" data-i18n="table.showingCount">顯示 0 / 0 筆資料</span>
           <button onclick="exportCSV()" class="text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
-            <i class="fa-solid fa-file-csv mr-1"></i> 下載 CSV
+            <i class="fa-solid fa-file-csv mr-1"></i> <span data-i18n="table.downloadCSV">下載 CSV</span>
           </button>
         </div>
       </div>
@@ -248,10 +257,10 @@
           </div>
           <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
             <a id="modalLink" href="#" target="_blank" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto transition-colors">
-              <i class="fa-solid fa-external-link-alt mr-2 mt-1"></i> 前往文件
+              <i class="fa-solid fa-external-link-alt mr-2 mt-1"></i> <span data-i18n="modal.viewDocs">前往文件</span>
             </a>
             <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto transition-colors" onclick="closeModal()">
-              關閉
+              <span data-i18n="modal.close">關閉</span>
             </button>
           </div>
         </div>
@@ -262,63 +271,179 @@
   <!-- Notification Toast -->
   <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-2 rounded shadow-lg transform translate-y-20 transition-transform duration-300 z-50 text-sm flex items-center gap-2">
     <i class="fa-solid fa-check-circle text-green-400"></i>
-    <span>連結已複製</span>
+    <span data-i18n="toast.linkCopied">連結已複製</span>
   </div>
 
   <script>
+    // --- 0. Internationalization (i18n) ---
+    let currentLang = localStorage.getItem('preferredLang') || 'zh-TW';
+    
+    const translations = {
+      'zh-TW': {
+        'header.title': 'API 資源探勘報告',
+        'header.subtitle': '免費公開 API 整合清單 (Top 80+ Selection)',
+        'header.totalApis': '收錄 API',
+        'header.freeApis': '完全免費',
+        'intro.title': '關於此報告',
+        'intro.description': '本應用程式將「免費公共 API 資源報告」轉化為互動式儀表板。針對開發者、數據分析師與創意編碼者，我們整理了目前網路上最實用、穩定且易於串接的 API 接口。與其閱讀冗長的靜態文件，您可以透過下方的視覺化圖表了解目前的 API 生態分佈，並使用「智慧清單」功能快速篩選出符合您專案需求的資源。所有資料皆已結構化處理，方便您進行比較與查找。',
+        'analytics.title': 'API 生態數據分析',
+        'analytics.description': '視覺化呈現各類型 API 的佔比與認證門檻，協助您快速掌握資源概況。',
+        'analytics.categoryTitle': '資源類別分佈',
+        'analytics.categoryDesc': '顯示各領域 API 的數量佔比',
+        'analytics.authTitle': '認證機制統計',
+        'analytics.authDesc': '分析 API 的接入難度 (No Auth 最易接入)',
+        'table.title': '資源智慧清單',
+        'table.description': '類似 Google 試算表的結構化檢視，支援即時搜尋與多維度篩選。',
+        'table.searchPlaceholder': '搜尋名稱、描述或關鍵字...',
+        'table.allCategories': '所有分類',
+        'table.headers.name': 'API 名稱',
+        'table.headers.category': '分類',
+        'table.headers.description': '功能簡述',
+        'table.headers.auth': '認證',
+        'table.headers.actions': '操作',
+        'table.showingCount': '顯示 0 / 0 筆資料',
+        'table.downloadCSV': '下載 CSV',
+        'table.noResults': '找不到符合的 API 資源',
+        'table.copyLink': '複製連結',
+        'table.openLink': '開啟連結',
+        'modal.viewDocs': '前往文件',
+        'modal.close': '關閉',
+        'modal.httpsYes': '支援',
+        'modal.httpsNo': '不支援',
+        'toast.linkCopied': '連結已複製',
+        'auth.none': '無須認證',
+        'auth.apikey': 'API Key',
+        'auth.oauth': 'OAuth'
+      },
+      'en': {
+        'header.title': 'Public API Resource Explorer',
+        'header.subtitle': 'Free Public API Integration List (Top 80+ Selection)',
+        'header.totalApis': 'Total APIs',
+        'header.freeApis': 'Completely Free',
+        'intro.title': 'About This Report',
+        'intro.description': 'This application transforms the "Free Public API Resource Report" into an interactive dashboard. For developers, data analysts, and creative coders, we have curated the most practical, stable, and easy-to-integrate API interfaces currently available online. Instead of reading lengthy static documents, you can understand the current API ecosystem distribution through the visualizations below and use the "Smart List" feature to quickly filter resources that meet your project needs. All data has been structured for easy comparison and lookup.',
+        'analytics.title': 'API Ecosystem Analytics',
+        'analytics.description': 'Visualize the distribution and authentication requirements of various API types to help you quickly understand the resource landscape.',
+        'analytics.categoryTitle': 'Category Distribution',
+        'analytics.categoryDesc': 'Shows the quantity ratio of APIs across different fields',
+        'analytics.authTitle': 'Authentication Statistics',
+        'analytics.authDesc': 'Analyze API access difficulty (No Auth is easiest to access)',
+        'table.title': 'Smart Resource List',
+        'table.description': 'A structured view similar to Google Sheets, supporting real-time search and multi-dimensional filtering.',
+        'table.searchPlaceholder': 'Search name, description or keywords...',
+        'table.allCategories': 'All Categories',
+        'table.headers.name': 'API Name',
+        'table.headers.category': 'Category',
+        'table.headers.description': 'Description',
+        'table.headers.auth': 'Auth',
+        'table.headers.actions': 'Actions',
+        'table.showingCount': 'Showing 0 / 0 entries',
+        'table.downloadCSV': 'Download CSV',
+        'table.noResults': 'No matching API resources found',
+        'table.copyLink': 'Copy link',
+        'table.openLink': 'Open link',
+        'modal.viewDocs': 'View Documentation',
+        'modal.close': 'Close',
+        'modal.httpsYes': 'Supported',
+        'modal.httpsNo': 'Not Supported',
+        'toast.linkCopied': 'Link copied',
+        'auth.none': 'No Auth',
+        'auth.apikey': 'API Key',
+        'auth.oauth': 'OAuth'
+      }
+    };
+
+    function t(key) {
+      return translations[currentLang][key] || translations['zh-TW'][key] || key;
+    }
+
+    function switchLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('preferredLang', lang);
+      document.documentElement.lang = lang;
+      
+      // Update language buttons
+      document.getElementById('lang-zh').className = lang === 'zh-TW' 
+        ? 'px-3 py-1.5 rounded-md bg-indigo-600 text-white text-xs font-medium transition-colors'
+        : 'px-3 py-1.5 rounded-md bg-gray-200 text-gray-700 text-xs font-medium hover:bg-gray-300 transition-colors';
+      document.getElementById('lang-en').className = lang === 'en'
+        ? 'px-3 py-1.5 rounded-md bg-indigo-600 text-white text-xs font-medium transition-colors'
+        : 'px-3 py-1.5 rounded-md bg-gray-200 text-gray-700 text-xs font-medium hover:bg-gray-300 transition-colors';
+      
+      // Update all elements with data-i18n attribute
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        el.textContent = t(key);
+      });
+      
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        el.placeholder = t(key);
+      });
+      
+      // Update API descriptions if needed
+      if (currentData.length > 0) {
+        renderTable(currentData);
+      }
+      
+      // Re-render stats to update chart labels
+      renderStats();
+    }
+
     // --- 1. Data Source ---
     const apiData = [
-      { name: "Cat Facts", category: "Animals", auth: "No Auth", https: true, cors: "Yes", desc: "每日隨機貓咪冷知識", link: "https://alexwohlbruck.github.io/cat-facts/" },
-      { name: "Dog CEO", category: "Animals", auth: "No Auth", https: true, cors: "Yes", desc: "根據品種獲取狗狗圖片集", link: "https://dog.ceo/dog-api/" },
-      { name: "PetFinder", category: "Animals", auth: "ApiKey", https: true, cors: "Yes", desc: "寵物領養數據庫 (需要申請)", link: "https://www.petfinder.com/developers/" },
-      { name: "AnimeChan", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: "隨機動漫語錄", link: "https://github.com/rocktimsaikia/anime-chan" },
-      { name: "Jikan", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: "非官方 MyAnimeList API", link: "https://jikan.moe/" },
-      { name: "Studio Ghibli", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: "吉卜力工作室電影與角色資料", link: "https://ghibliapi.vercel.app/" },
-      { name: "VirusTotal", category: "Security", auth: "ApiKey", https: true, cors: "Unknown", desc: "分析可疑文件與網址", link: "https://www.virustotal.com/" },
-      { name: "HaveIBeenPwned", category: "Security", auth: "ApiKey", https: true, cors: "Yes", desc: "檢查 Email 是否在洩露名單", link: "https://haveibeenpwned.com/API/v3" },
-      { name: "Open Library", category: "Books", auth: "No Auth", https: true, cors: "Yes", desc: "圖書、封面與作者數據庫", link: "https://openlibrary.org/developers/api" },
-      { name: "Gutendex", category: "Books", auth: "No Auth", https: true, cors: "Yes", desc: "古騰堡計畫電子書索引", link: "https://gutendex.com/" },
-      { name: "CoinGecko", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: "加密貨幣價格與市場數據", link: "https://www.coingecko.com/en/api" },
-      { name: "Binance", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: "幣安交易所公共數據", link: "https://github.com/binance/binance-spot-api-docs" },
-      { name: "ExchangeRate-API", category: "Finance", auth: "ApiKey", https: true, cors: "Yes", desc: "法幣匯率轉換", link: "https://www.exchangerate-api.com/" },
-      { name: "WallstreetBets", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: "WSB Reddit 討論趨勢", link: "https://wsb-api.onrender.com/" },
-      { name: "Public Holidays", category: "Calendar", auth: "No Auth", https: true, cors: "Yes", desc: "全球各國國定假日查詢", link: "https://date.nager.at/" },
-      { name: "Google Fonts", category: "Design", auth: "ApiKey", https: true, cors: "Yes", desc: "Google 字體元數據", link: "https://developers.google.com/fonts/docs/developer_api" },
-      { name: "Unsplash", category: "Photography", auth: "ApiKey", https: true, cors: "Yes", desc: "高畫質免版權圖片搜尋", link: "https://unsplash.com/developers" },
-      { name: "JSONPlaceholder", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "測試用的假資料 (Posts, Users)", link: "https://jsonplaceholder.typicode.com/" },
-      { name: "ReqRes", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "模擬 REST API 回應", link: "https://reqres.in/" },
-      { name: "HttpBin", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "HTTP 請求與回應測試工具", link: "https://httpbin.org/" },
-      { name: "IPify", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "簡單獲取公共 IP 地址", link: "https://www.ipify.org/" },
-      { name: "Genderize.io", category: "Demographics", auth: "No Auth", https: true, cors: "Yes", desc: "根據名字預測性別", link: "https://genderize.io/" },
-      { name: "Agify.io", category: "Demographics", auth: "No Auth", https: true, cors: "Yes", desc: "根據名字預測年齡", link: "https://agify.io/" },
-      { name: "OpenWeather", category: "Weather", auth: "ApiKey", https: true, cors: "Yes", desc: "全球天氣預報與歷史數據", link: "https://openweathermap.org/api" },
-      { name: "7Timer!", category: "Weather", auth: "No Auth", https: true, cors: "Yes", desc: "天文氣象預報", link: "http://www.7timer.info/doc.php" },
-      { name: "NASA", category: "Science", auth: "ApiKey", https: true, cors: "Yes", desc: "天文圖片、小行星數據等", link: "https://api.nasa.gov/" },
-      { name: "SpaceX", category: "Science", auth: "No Auth", https: true, cors: "Yes", desc: "SpaceX 發射任務數據", link: "https://github.com/r-spacex/SpaceX-API" },
-      { name: "Rest Countries", category: "Geocoding", auth: "No Auth", https: true, cors: "Yes", desc: "國家資訊 (人口、貨幣、國旗)", link: "https://restcountries.com/" },
-      { name: "Zipcopotamus", category: "Geocoding", auth: "No Auth", https: true, cors: "Yes", desc: "郵遞區號查詢城市", link: "https://www.zippopotam.us/" },
-      { name: "Spotify", category: "Music", auth: "OAuth", https: true, cors: "Yes", desc: "音樂元數據、播放清單", link: "https://developer.spotify.com/documentation/web-api/" },
-      { name: "Last.fm", category: "Music", auth: "ApiKey", https: true, cors: "Yes", desc: "音樂資料庫與聽歌紀錄", link: "https://www.last.fm/api" },
-      { name: "Lyrics.ovh", category: "Music", auth: "No Auth", https: true, cors: "Yes", desc: "簡單歌詞查詢", link: "https://lyrics.ovh/" },
-      { name: "OpenFoodFacts", category: "Food", auth: "No Auth", https: true, cors: "Yes", desc: "全球食品成分數據庫", link: "https://world.openfoodfacts.org/data" },
-      { name: "TheCocktailDB", category: "Food", auth: "ApiKey", https: true, cors: "Yes", desc: "雞尾酒配方資料庫", link: "https://www.thecocktaildb.com/api.php" },
-      { name: "PunkAPI", category: "Food", auth: "No Auth", https: true, cors: "Yes", desc: "BrewDog 啤酒配方", link: "https://punkapi.com/" },
-      { name: "NewsAPI", category: "News", auth: "ApiKey", https: true, cors: "Yes", desc: "全球新聞標題索引", link: "https://newsapi.org/" },
-      { name: "HackerNews", category: "News", auth: "No Auth", https: true, cors: "Yes", desc: "官方 Firebase API", link: "https://github.com/HackerNews/API" },
-      { name: "Advice Slip", category: "Fun", auth: "No Auth", https: true, cors: "Yes", desc: "隨機產生一條建議", link: "https://api.adviceslip.com/" },
-      { name: "Bored API", category: "Fun", auth: "No Auth", https: true, cors: "Yes", desc: "當你無聊時的活動建議", link: "https://www.boredapi.com/" },
-      { name: "FunTranslations", category: "Fun", auth: "ApiKey", https: true, cors: "Yes", desc: "尤達大師、精靈語翻譯", link: "https://funtranslations.com/api" },
-      { name: "Pokemon TCG", category: "Games", auth: "ApiKey", https: true, cors: "Yes", desc: "寶可夢集換式卡牌資料", link: "https://pokemontcg.io/" },
-      { name: "OpenDota", category: "Games", auth: "No Auth", https: true, cors: "Yes", desc: "Dota 2 比賽數據", link: "https://docs.opendota.com/" },
-      { name: "CheapShark", category: "Games", auth: "No Auth", https: true, cors: "Yes", desc: "PC 遊戲特價追蹤", link: "https://www.cheapshark.com/api/1.0/" },
-      { name: "DictionaryAPI", category: "Utility", auth: "No Auth", https: true, cors: "Yes", desc: "免費英語字典", link: "https://dictionaryapi.dev/" },
-      { name: "Urban Dictionary", category: "Utility", auth: "ApiKey", https: true, cors: "Yes", desc: "俚語字典", link: "https://rapidapi.com/community/api/urban-dictionary" },
-      { name: "QR Code Generator", category: "Utility", auth: "No Auth", https: true, cors: "Yes", desc: "生成 QR Code 圖片", link: "https://goqr.me/api/" },
-      { name: "Random User", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "產生隨機用戶個資", link: "https://randomuser.me/" },
-      { name: "DiceBear", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: "生成 SVG 頭像", link: "https://dicebear.com/" },
-      { name: "Mapbox", category: "Geocoding", auth: "ApiKey", https: true, cors: "Yes", desc: "地圖與導航服務", link: "https://docs.mapbox.com/api/" },
-      { name: "Discord", category: "Social", auth: "OAuth", https: true, cors: "Yes", desc: "Discord 機器人與互動", link: "https://discord.com/developers/docs/intro" },
-      { name: "Telegram", category: "Social", auth: "ApiKey", https: true, cors: "Yes", desc: "Telegram Bot API", link: "https://core.telegram.org/bots/api" }
+      { name: "Cat Facts", category: "Animals", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "每日隨機貓咪冷知識", 'en': "Daily random cat facts" }, link: "https://alexwohlbruck.github.io/cat-facts/" },
+      { name: "Dog CEO", category: "Animals", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "根據品種獲取狗狗圖片集", 'en': "Get dog images by breed" }, link: "https://dog.ceo/dog-api/" },
+      { name: "PetFinder", category: "Animals", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "寵物領養數據庫 (需要申請)", 'en': "Pet adoption database (registration required)" }, link: "https://www.petfinder.com/developers/" },
+      { name: "AnimeChan", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "隨機動漫語錄", 'en': "Random anime quotes" }, link: "https://github.com/rocktimsaikia/anime-chan" },
+      { name: "Jikan", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "非官方 MyAnimeList API", 'en': "Unofficial MyAnimeList API" }, link: "https://jikan.moe/" },
+      { name: "Studio Ghibli", category: "Anime", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "吉卜力工作室電影與角色資料", 'en': "Studio Ghibli films and characters data" }, link: "https://ghibliapi.vercel.app/" },
+      { name: "VirusTotal", category: "Security", auth: "ApiKey", https: true, cors: "Unknown", desc: { 'zh-TW': "分析可疑文件與網址", 'en': "Analyze suspicious files and URLs" }, link: "https://www.virustotal.com/" },
+      { name: "HaveIBeenPwned", category: "Security", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "檢查 Email 是否在洩露名單", 'en': "Check if email is in data breach list" }, link: "https://haveibeenpwned.com/API/v3" },
+      { name: "Open Library", category: "Books", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "圖書、封面與作者數據庫", 'en': "Books, covers and authors database" }, link: "https://openlibrary.org/developers/api" },
+      { name: "Gutendex", category: "Books", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "古騰堡計畫電子書索引", 'en': "Project Gutenberg ebook index" }, link: "https://gutendex.com/" },
+      { name: "CoinGecko", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "加密貨幣價格與市場數據", 'en': "Cryptocurrency prices and market data" }, link: "https://www.coingecko.com/en/api" },
+      { name: "Binance", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "幣安交易所公共數據", 'en': "Binance exchange public data" }, link: "https://github.com/binance/binance-spot-api-docs" },
+      { name: "ExchangeRate-API", category: "Finance", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "法幣匯率轉換", 'en': "Fiat currency exchange rates" }, link: "https://www.exchangerate-api.com/" },
+      { name: "WallstreetBets", category: "Finance", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "WSB Reddit 討論趨勢", 'en': "WallStreetBets Reddit discussion trends" }, link: "https://wsb-api.onrender.com/" },
+      { name: "Public Holidays", category: "Calendar", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "全球各國國定假日查詢", 'en': "Public holidays worldwide" }, link: "https://date.nager.at/" },
+      { name: "Google Fonts", category: "Design", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "Google 字體元數據", 'en': "Google Fonts metadata" }, link: "https://developers.google.com/fonts/docs/developer_api" },
+      { name: "Unsplash", category: "Photography", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "高畫質免版權圖片搜尋", 'en': "High-quality royalty-free image search" }, link: "https://unsplash.com/developers" },
+      { name: "JSONPlaceholder", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "測試用的假資料 (Posts, Users)", 'en': "Fake data for testing (Posts, Users)" }, link: "https://jsonplaceholder.typicode.com/" },
+      { name: "ReqRes", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "模擬 REST API 回應", 'en': "Mock REST API responses" }, link: "https://reqres.in/" },
+      { name: "HttpBin", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "HTTP 請求與回應測試工具", 'en': "HTTP request and response testing tool" }, link: "https://httpbin.org/" },
+      { name: "IPify", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "簡單獲取公共 IP 地址", 'en': "Simple public IP address lookup" }, link: "https://www.ipify.org/" },
+      { name: "Genderize.io", category: "Demographics", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "根據名字預測性別", 'en': "Predict gender by name" }, link: "https://genderize.io/" },
+      { name: "Agify.io", category: "Demographics", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "根據名字預測年齡", 'en': "Predict age by name" }, link: "https://agify.io/" },
+      { name: "OpenWeather", category: "Weather", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "全球天氣預報與歷史數據", 'en': "Global weather forecasts and historical data" }, link: "https://openweathermap.org/api" },
+      { name: "7Timer!", category: "Weather", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "天文氣象預報", 'en': "Astronomical weather forecast" }, link: "http://www.7timer.info/doc.php" },
+      { name: "NASA", category: "Science", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "天文圖片、小行星數據等", 'en': "Astronomy images, asteroid data, and more" }, link: "https://api.nasa.gov/" },
+      { name: "SpaceX", category: "Science", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "SpaceX 發射任務數據", 'en': "SpaceX launch mission data" }, link: "https://github.com/r-spacex/SpaceX-API" },
+      { name: "Rest Countries", category: "Geocoding", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "國家資訊 (人口、貨幣、國旗)", 'en': "Country information (population, currency, flag)" }, link: "https://restcountries.com/" },
+      { name: "Zipcopotamus", category: "Geocoding", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "郵遞區號查詢城市", 'en': "ZIP code to city lookup" }, link: "https://www.zippopotam.us/" },
+      { name: "Spotify", category: "Music", auth: "OAuth", https: true, cors: "Yes", desc: { 'zh-TW': "音樂元數據、播放清單", 'en': "Music metadata and playlists" }, link: "https://developer.spotify.com/documentation/web-api/" },
+      { name: "Last.fm", category: "Music", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "音樂資料庫與聽歌紀錄", 'en': "Music database and listening history" }, link: "https://www.last.fm/api" },
+      { name: "Lyrics.ovh", category: "Music", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "簡單歌詞查詢", 'en': "Simple lyrics lookup" }, link: "https://lyrics.ovh/" },
+      { name: "OpenFoodFacts", category: "Food", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "全球食品成分數據庫", 'en': "Global food ingredients database" }, link: "https://world.openfoodfacts.org/data" },
+      { name: "TheCocktailDB", category: "Food", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "雞尾酒配方資料庫", 'en': "Cocktail recipe database" }, link: "https://www.thecocktaildb.com/api.php" },
+      { name: "PunkAPI", category: "Food", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "BrewDog 啤酒配方", 'en': "BrewDog beer recipes" }, link: "https://punkapi.com/" },
+      { name: "NewsAPI", category: "News", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "全球新聞標題索引", 'en': "Global news headlines index" }, link: "https://newsapi.org/" },
+      { name: "HackerNews", category: "News", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "官方 Firebase API", 'en': "Official Firebase API" }, link: "https://github.com/HackerNews/API" },
+      { name: "Advice Slip", category: "Fun", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "隨機產生一條建議", 'en': "Generate random advice" }, link: "https://api.adviceslip.com/" },
+      { name: "Bored API", category: "Fun", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "當你無聊時的活動建議", 'en': "Activity suggestions when you're bored" }, link: "https://www.boredapi.com/" },
+      { name: "FunTranslations", category: "Fun", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "尤達大師、精靈語翻譯", 'en': "Yoda, Elvish and other fun translations" }, link: "https://funtranslations.com/api" },
+      { name: "Pokemon TCG", category: "Games", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "寶可夢集換式卡牌資料", 'en': "Pokemon Trading Card Game data" }, link: "https://pokemontcg.io/" },
+      { name: "OpenDota", category: "Games", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "Dota 2 比賽數據", 'en': "Dota 2 match data" }, link: "https://docs.opendota.com/" },
+      { name: "CheapShark", category: "Games", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "PC 遊戲特價追蹤", 'en': "PC game deals tracker" }, link: "https://www.cheapshark.com/api/1.0/" },
+      { name: "DictionaryAPI", category: "Utility", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "免費英語字典", 'en': "Free English dictionary" }, link: "https://dictionaryapi.dev/" },
+      { name: "Urban Dictionary", category: "Utility", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "俚語字典", 'en': "Slang dictionary" }, link: "https://rapidapi.com/community/api/urban-dictionary" },
+      { name: "QR Code Generator", category: "Utility", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "生成 QR Code 圖片", 'en': "Generate QR code images" }, link: "https://goqr.me/api/" },
+      { name: "Random User", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "產生隨機用戶個資", 'en': "Generate random user profiles" }, link: "https://randomuser.me/" },
+      { name: "DiceBear", category: "Development", auth: "No Auth", https: true, cors: "Yes", desc: { 'zh-TW': "生成 SVG 頭像", 'en': "Generate SVG avatars" }, link: "https://dicebear.com/" },
+      { name: "Mapbox", category: "Geocoding", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "地圖與導航服務", 'en': "Maps and navigation services" }, link: "https://docs.mapbox.com/api/" },
+      { name: "Discord", category: "Social", auth: "OAuth", https: true, cors: "Yes", desc: { 'zh-TW': "Discord 機器人與互動", 'en': "Discord bots and interactions" }, link: "https://discord.com/developers/docs/intro" },
+      { name: "Telegram", category: "Social", auth: "ApiKey", https: true, cors: "Yes", desc: { 'zh-TW': "Telegram Bot API", 'en': "Telegram Bot API" }, link: "https://core.telegram.org/bots/api" }
     ];
 
     // State Management
@@ -406,7 +531,7 @@
         data: {
           labels: Object.keys(authCounts),
           datasets: [{
-            label: '數量',
+            label: currentLang === 'zh-TW' ? '數量' : 'Count',
             data: Object.values(authCounts),
             backgroundColor: ['#dcfce7', '#fff7ed', '#eff6ff'],
             borderColor: ['#166534', '#9a3412', '#1e40af'],
@@ -441,9 +566,9 @@
     // --- 3. Table/Grid Rendering & Logic ---
 
     function getAuthBadge(authType) {
-      if (authType === 'No Auth') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-none ring-1 ring-inset ring-green-600/20">無須認證</span>`;
-      if (authType === 'ApiKey') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-key ring-1 ring-inset ring-orange-600/20">API Key</span>`;
-      if (authType === 'OAuth') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-oauth ring-1 ring-inset ring-blue-700/10">OAuth</span>`;
+      if (authType === 'No Auth') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-none ring-1 ring-inset ring-green-600/20">${t('auth.none')}</span>`;
+      if (authType === 'ApiKey') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-key ring-1 ring-inset ring-orange-600/20">${t('auth.apikey')}</span>`;
+      if (authType === 'OAuth') return `<span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium badge-auth-oauth ring-1 ring-inset ring-blue-700/10">${t('auth.oauth')}</span>`;
       return `<span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">${authType}</span>`;
     }
 
@@ -457,10 +582,11 @@
       const tbody = document.getElementById('apiTableBody');
       tbody.innerHTML = '';
 
-      document.getElementById('showing-count').innerText = `顯示 ${data.length} / ${apiData.length} 筆資料`;
+      const showingText = t('table.showingCount').replace('0 / 0', `${data.length} / ${apiData.length}`);
+      document.getElementById('showing-count').innerText = showingText;
 
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 italic">找不到符合的 API 資源</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-slate-400 italic">${t('table.noResults')}</td></tr>`;
         return;
       }
 
@@ -472,6 +598,8 @@
           openModal(item);
         };
 
+        const desc = typeof item.desc === 'object' ? item.desc[currentLang] || item.desc['zh-TW'] : item.desc;
+
         tr.innerHTML = `
           <td class="px-6 py-4">
             <div class="font-medium text-slate-900 group-hover:text-indigo-600 transition-colors">${item.name}</div>
@@ -481,8 +609,8 @@
               ${item.category}
             </span>
           </td>
-          <td class="px-6 py-4 text-slate-500 truncate max-w-xs" title="${item.desc}">
-            ${item.desc}
+          <td class="px-6 py-4 text-slate-500 truncate max-w-xs" title="${desc}">
+            ${desc}
           </td>
           <td class="px-6 py-4">
             ${getAuthBadge(item.auth)}
@@ -491,10 +619,10 @@
             ${getHttpsIcon(item.https)}
           </td>
           <td class="px-6 py-4 text-right">
-            <button onclick="copyLink('${item.link}')" class="text-slate-400 hover:text-indigo-600 p-2" title="複製連結">
+            <button onclick="copyLink('${item.link}')" class="text-slate-400 hover:text-indigo-600 p-2" title="${t('table.copyLink')}">
               <i class="fa-regular fa-copy"></i>
             </button>
-            <a href="${item.link}" target="_blank" class="text-slate-400 hover:text-indigo-600 p-2 ml-1" title="開啟連結">
+            <a href="${item.link}" target="_blank" class="text-slate-400 hover:text-indigo-600 p-2 ml-1" title="${t('table.openLink')}">
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
           </td>
@@ -530,9 +658,10 @@
     function openModal(item) {
       document.getElementById('modalTitle').innerText = item.name;
       document.getElementById('modalCategory').innerText = item.category;
-      document.getElementById('modalDesc').innerText = item.desc;
+      const desc = typeof item.desc === 'object' ? item.desc[currentLang] || item.desc['zh-TW'] : item.desc;
+      document.getElementById('modalDesc').innerText = desc;
       document.getElementById('modalAuth').innerHTML = getAuthBadge(item.auth);
-      document.getElementById('modalHttps').innerText = item.https ? "支援" : "不支援";
+      document.getElementById('modalHttps').innerText = item.https ? t('modal.httpsYes') : t('modal.httpsNo');
       document.getElementById('modalCors').innerText = item.cors;
       document.getElementById('modalLink').href = item.link;
       
@@ -570,6 +699,8 @@
 
     // --- Initialization ---
     window.onload = function() {
+      // Apply saved language preference
+      switchLanguage(currentLang);
       renderStats();
       renderTable(apiData);
     };
